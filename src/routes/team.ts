@@ -21,10 +21,9 @@ team.post('/team/create', async (req, res) => {
 });
 
 // метод для удаления команды
-team.post('/team/delete', async (req, res) => {
+team.delete('/team/delete/:team_id', async (req, res) => {
   const token = req.headers[authHeader] as string;
-  const { team_id } = req.body;
-  const verifyWork = await teamHandler.delete(token, team_id);
+  const verifyWork = await teamHandler.delete(token, Number(req.params.team_id));
 
   return verifyWork !== null
     ? res.status(200).json(verifyWork)
@@ -32,7 +31,7 @@ team.post('/team/delete', async (req, res) => {
 });
 
 // метод для вывода списка команд пользователя
-team.post('/team/list', async (req, res) => {
+team.get('/team/list', async (req, res) => {
   const token = req.headers[authHeader] as string;
   const verifyWork = await teamHandler.list(token);
 
@@ -42,7 +41,7 @@ team.post('/team/list', async (req, res) => {
 });
 
 // метод для вывода информации о команде
-team.post('/team/info', async (req, res) => {
+team.get('/team/info', async (req, res) => {
   const token = req.headers[authHeader] as string;
   const { team_id } = req.body;
   const verifyWork = await teamHandler.info(token,team_id);

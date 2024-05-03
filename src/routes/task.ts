@@ -21,10 +21,9 @@ task.post('/task/create', async (req, res) => {
 });
 
 // метод для удаления задания
-task.post('/task/delete', async (req, res) => {
+task.delete('/task/delete/:task_id', async (req, res) => {
   const token = req.headers[authHeader] as string;
-  const { task_id } = req.body;
-  const verifyWork = await taskHandler.delete(token, task_id);
+  const verifyWork = await taskHandler.delete(token, Number(req.params.task_id));
 
   return verifyWork !== null
     ? res.status(200).json(verifyWork)
@@ -32,7 +31,7 @@ task.post('/task/delete', async (req, res) => {
 });
 
 // метод для вывода списка заданий
-task.post('/task/list', async (req, res) => {
+task.get('/task/list', async (req, res) => {
   const token = req.headers[authHeader] as string;
   const { team_id } = req.body;
   const verifyWork = await taskHandler.list(token, team_id);

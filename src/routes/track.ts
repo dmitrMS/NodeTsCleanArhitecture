@@ -31,7 +31,7 @@ track.post('/track/stop', async (req, res) => {
 });
 
 // метод для изменения работы
-track.post('/track/update', async (req, res) => {
+track.put('/track/update', async (req, res) => {
   const token = req.headers[authHeader] as string;
   const { id_work, task_name, begin_date, end_date } = req.body;
   const result = await trackHandler.update(
@@ -48,16 +48,15 @@ track.post('/track/update', async (req, res) => {
 });
 
 // сетод для удаления работы
-track.post('/track/delete', async (req, res) => {
+track.delete('/track/delete/:id_work', async (req, res) => {
   const token = req.headers[authHeader] as string;
-  const { id_work } = req.body;
-  await trackHandler.delete(token, id_work);
+  await trackHandler.delete(token, Number(req.params.id_work));
 
   return res.status(200).json({ message: 'Работа удалена' });
 });
 
 // метод для проверки на текущую работу
-track.post('/track/status', async (req, res) => {
+track.get('/track/status', async (req, res) => {
   const token = req.headers[authHeader] as string;
   const verifyWork = await trackHandler.status(token);
 
@@ -67,7 +66,7 @@ track.post('/track/status', async (req, res) => {
 });
 
 // метод для выода списка команд
-track.post('/track/list', async (req, res) => {
+track.get('/track/list', async (req, res) => {
   const token = req.headers[authHeader] as string;
   const { team_id } = req.body;
   const verifyWork = await trackHandler.list(token, team_id);
@@ -76,7 +75,7 @@ track.post('/track/list', async (req, res) => {
 });
 
 // метод для вывода списка командных работ пользователя
-track.post('/team/track/list', async (req, res) => {
+track.get('/team/track/list', async (req, res) => {
   const token = req.headers[authHeader] as string;
   const { team_id } = req.body;
   const verifyWork = await trackHandler.listTeam(token, team_id);
@@ -85,7 +84,7 @@ track.post('/team/track/list', async (req, res) => {
 });
 
 // метод для вывода списка работ на определённое задание 
-track.post('/task/track/list', async (req, res) => {
+track.get('/task/track/list', async (req, res) => {
   const token = req.headers[authHeader] as string;
   const { task_id } = req.body;
   const verifyWork = await trackHandler.listTask(token, task_id);

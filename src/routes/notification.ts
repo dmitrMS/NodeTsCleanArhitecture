@@ -10,7 +10,7 @@ const notificationHandler = new NotificationHandler(db, jwt);
 const authHeader = 'x-auth-key';
 
 // метод для обновления данных уведомления
-notification.post('/notification/update', async (req, res) => {
+notification.put('/notification/update', async (req, res) => {
   const token = req.headers[authHeader] as string;
   const { notification_id, team_id } = req.body;
   const verifyWork = await notificationHandler.updateTeam(
@@ -25,10 +25,9 @@ notification.post('/notification/update', async (req, res) => {
 });
 
 // метод для удаления уведомления
-notification.post('/notification/delete', async (req, res) => {
+notification.delete('/notification/delete/:notification_id', async (req, res) => {
   const token = req.headers[authHeader] as string;
-  const { notification_id } = req.body;
-  const verifyWork = await notificationHandler.delete(token, notification_id);
+  const verifyWork = await notificationHandler.delete(token, Number(req.params.notification_id));
 
   return verifyWork !== null
     ? res.status(200).json(verifyWork)
@@ -36,7 +35,7 @@ notification.post('/notification/delete', async (req, res) => {
 });
 
 // метод для вывода списка уведомлений
-notification.post('/notification/list', async (req, res) => {
+notification.get('/notification/list', async (req, res) => {
   const token = req.headers[authHeader] as string;
   const verifyWork = await notificationHandler.status(token);
 

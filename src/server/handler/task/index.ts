@@ -25,14 +25,6 @@ export class TaskHandler {
     return verifyUser !== null ? await this.db.deleteTask(id_task) : null;
   }
 
-  // async status(token: string) {
-  //   const verifyUser = await this.jwt.auntentificationAdmin(token);
-
-  //   return verifyUser !== null
-  //     ? await this.db.getUnfinishedTasks()
-  //     : null;
-  // }
-
   // контроллер для вывода списка заданий команды
   async list(token: string, team_id: number) {
     const verifyUser = await this.jwt.auntentification(token);

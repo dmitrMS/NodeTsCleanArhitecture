@@ -10,10 +10,9 @@ const userTeamHandler = new UserTeamHandler(db, jwt);
 const authHeader = 'x-auth-key';
 
 // метод для удаления участника из команды
-user_team.post('/user_team/delete', async (req, res) => {
+user_team.delete('/user_team/delete/:user_id/:team_id', async (req, res) => {
   const token = req.headers[authHeader] as string;
-  const { user_id,team_id } = req.body;
-  const verifyWork = await userTeamHandler.delete(token,user_id,team_id);
+  const verifyWork = await userTeamHandler.delete(token,Number(req.params.user_id),Number(req.params.team_id));
 
   return verifyWork !== null
     ? res.status(200).json(verifyWork)
@@ -21,7 +20,7 @@ user_team.post('/user_team/delete', async (req, res) => {
 });
 
 // метод для вывода списка участников команды
-user_team.post('/user_team/list', async (req, res) => {
+user_team.get('/user_team/list', async (req, res) => {
     const token = req.headers[authHeader] as string;
     const { team_id } = req.body;
     const verifyWork = await userTeamHandler.list(token,team_id);

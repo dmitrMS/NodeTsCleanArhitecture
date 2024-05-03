@@ -279,17 +279,6 @@ export class Database {
     return null;
   }
 
-  // вывести список команд
-  // async getTeams(id: number) {
-  //   const verifyWork = await prisma.team.findFirst({
-  //     where: {
-  //       id: id
-  //     }
-  //   });
-
-  //   return verifyWork !== null ? verifyWork : null;
-  // }
-
   // найти команду по идентификатору
   async getTeamById(id : number) {
     const verifyWork = await prisma.team.findFirst({
