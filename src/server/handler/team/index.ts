@@ -1,6 +1,7 @@
-import { Jwt } from '../../../jwt';
-import { Database } from '../../../database';
+import { Jwt } from '../../../DAL/jwt';
+import { Database } from '../../../BLL/database';
 
+//класс для работы с командами
 export class TeamHandler {
   db: Database;
   jwt: Jwt;
@@ -10,6 +11,8 @@ export class TeamHandler {
       this.jwt = jwt;
     }
   
+
+    // контроллер для создания команды
     async create(token: string,name: string) {
       const verifyUser = await this.jwt.auntentificationAdmin(token);
       const team=await this.db.createTeam(verifyUser ? verifyUser.id : NaN,name)
@@ -19,6 +22,7 @@ export class TeamHandler {
         : null;
     }
   
+    // контроллер для удаления команды
     async delete(token: string, team_id: number) {
       const verifyUser = await this.jwt.auntentificationAdmin(token);
   
@@ -27,6 +31,7 @@ export class TeamHandler {
         : null;
     }
   
+    // контроллер для добавления учатсника в команду
     async addUserTeam(token: string,login: string,team_id: number) {
       const verifyUser = await this.jwt.auntentificationAdmin(token);
       const invitedUser=await this.db.findUserByLogin(login);
@@ -36,11 +41,21 @@ export class TeamHandler {
         : null;
     }
   
+    // контроллер для вывода списка команд
     async list(token: string) {
       const verifyUser = await this.jwt.auntentification(token);
   
       return verifyUser !== null
         ? await this.db.getUsersTeams(verifyUser ? verifyUser.id : NaN)
+        : null;
+    }
+
+    // контроллер вывода инофрмации о команде 
+    async info(token: string,team_id: number) {
+      const verifyUser = await this.jwt.auntentification(token);
+  
+      return verifyUser !== null
+        ? await this.db.getTeamById(team_id)
         : null;
     }
   }

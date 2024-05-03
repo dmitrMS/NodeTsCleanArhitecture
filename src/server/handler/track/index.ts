@@ -1,6 +1,7 @@
-import { Jwt } from '../../../jwt';
-import { Database } from '../../../database';
+import { Jwt } from '../../../DAL/jwt';
+import { Database } from '../../../BLL/database';
 
+// класс для работы с рабочим временем
 export class TrackHandler {
   db: Database;
   jwt: Jwt;
@@ -10,6 +11,7 @@ export class TrackHandler {
     this.jwt = jwt;
   }
 
+  // контроллер для начала работы пользователя
   async start(token: string, task_name: string, task_id: number) {
     const verifyUser = await this.jwt.auntentification(token);
 
@@ -22,6 +24,7 @@ export class TrackHandler {
       : null;
   }
 
+  // контроллер для окончания работы пользователя
   async stop(token: string) {
     const verifyUser = await this.jwt.auntentification(token);
 
@@ -30,6 +33,7 @@ export class TrackHandler {
       : null;
   }
 
+  //контроллер для обновления данных о работе
   async update(
     token: string,
     id_work: number,
@@ -50,12 +54,14 @@ export class TrackHandler {
       : null;
   }
 
+  // контроллер для удаления работы
   async delete(token: string, id_work: number) {
     const verifyUser = await this.jwt.auntentification(token);
 
     return verifyUser !== null ? await this.db.deleteWorkTime(id_work) : null;
   }
 
+  // контроллер для проверки неоконченной работы
   async status(token: string) {
     const verifyUser = await this.jwt.auntentification(token);
 
@@ -64,6 +70,7 @@ export class TrackHandler {
       : null;
   }
 
+  // контроллер для вывода списка работ пользователя
   async list(token: string, team_id: number) {
     const verifyUser = await this.jwt.auntentification(token);
 
@@ -77,11 +84,21 @@ export class TrackHandler {
       : null;
   }
 
+  // контроллер для вывода списка работ команды
   async listTeam(token: string, team_id: number) {
     const verifyUser = await this.jwt.auntentification(token);
 
     return verifyUser !== null
       ? await this.db.getManuUsersTeamWorkTimes(team_id)
+      : null;
+  }
+
+  // контроллер для вывода списка  всех работ по заданию
+  async listTask(token: string, task_id: number) {
+    const verifyUser = await this.jwt.auntentification(token);
+
+    return verifyUser !== null
+      ? await this.db.getManuUsersTaskWorkTimes(task_id)
       : null;
   }
 }

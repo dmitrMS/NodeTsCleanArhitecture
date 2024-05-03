@@ -1,6 +1,7 @@
-import { Jwt } from '../../../jwt';
-import { Database } from '../../../database';
+import { Jwt } from '../../../DAL/jwt';
+import { Database } from '../../../BLL/database';
 
+// класс, отвечающий за работу с заданиями
 export class TaskHandler {
   db: Database;
   jwt: Jwt;
@@ -10,12 +11,14 @@ export class TaskHandler {
     this.jwt = jwt;
   }
 
+  // контроллер создания задания
   async create(token: string, name: string, team_id: number) {
     const verifyUser = await this.jwt.auntentificationAdmin(token);
 
     return verifyUser !== null ? await this.db.createTask(name, team_id) : null;
   }
 
+  // контроллер для удаления задания
   async delete(token: string, id_task: number) {
     const verifyUser = await this.jwt.auntentificationAdmin(token);
 
@@ -30,6 +33,7 @@ export class TaskHandler {
   //     : null;
   // }
 
+  // контроллер для вывода списка заданий команды
   async list(token: string, team_id: number) {
     const verifyUser = await this.jwt.auntentification(token);
     

@@ -1,6 +1,6 @@
 import { Router } from 'express';
-import { Jwt } from '../jwt';
-import { Database } from '../database';
+import { Jwt } from '../DAL/jwt';
+import { Database } from '../BLL/database';
 import { NotificationHandler } from '../server/handler/notification/index';
 
 export const notification = Router();
@@ -9,6 +9,7 @@ const jwt = new Jwt(db);
 const notificationHandler = new NotificationHandler(db, jwt);
 const authHeader = 'x-auth-key';
 
+// метод для обновления данных уведомления
 notification.post('/notification/update', async (req, res) => {
   const token = req.headers[authHeader] as string;
   const { notification_id, team_id } = req.body;
@@ -23,6 +24,7 @@ notification.post('/notification/update', async (req, res) => {
     : res.status(200).json(null);
 });
 
+// метод для удаления уведомления
 notification.post('/notification/delete', async (req, res) => {
   const token = req.headers[authHeader] as string;
   const { notification_id } = req.body;
@@ -33,6 +35,7 @@ notification.post('/notification/delete', async (req, res) => {
     : res.status(200).json(null);
 });
 
+// метод для вывода списка уведомлений
 notification.post('/notification/list', async (req, res) => {
   const token = req.headers[authHeader] as string;
   const verifyWork = await notificationHandler.status(token);

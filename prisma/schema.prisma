@@ -1,5 +1,6 @@
 generator client {
   provider = "prisma-client-js"
+  binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
 }
 
 datasource db {
@@ -26,7 +27,7 @@ model user_team {
   created_at DateTime   @default(now())
   updated_at DateTime   @default(now())
   user       user     @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "user")
-  team       team     @relation(fields: [team_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "team")
+  team       team     @relation(fields: [team_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "team")
 }
 
 model work_time {

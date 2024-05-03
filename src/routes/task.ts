@@ -1,6 +1,6 @@
 import { Router } from 'express';
-import { Jwt } from '../jwt';
-import { Database } from '../database';
+import { Jwt } from '../DAL/jwt';
+import { Database } from '../BLL/database';
 import { TaskHandler } from '../server/handler/task/index';
 
 export const task = Router();
@@ -9,6 +9,7 @@ const jwt = new Jwt(db);
 const taskHandler = new TaskHandler(db, jwt);
 const authHeader = 'x-auth-key';
 
+// метод для создания командного задания
 task.post('/task/create', async (req, res) => {
   const token = req.headers[authHeader] as string;
   const { name, team_id } = req.body;
@@ -19,6 +20,7 @@ task.post('/task/create', async (req, res) => {
     : res.status(200).json(null);
 });
 
+// метод для удаления задания
 task.post('/task/delete', async (req, res) => {
   const token = req.headers[authHeader] as string;
   const { task_id } = req.body;
@@ -29,6 +31,7 @@ task.post('/task/delete', async (req, res) => {
     : res.status(200).json(null);
 });
 
+// метод для вывода списка заданий
 task.post('/task/list', async (req, res) => {
   const token = req.headers[authHeader] as string;
   const { team_id } = req.body;

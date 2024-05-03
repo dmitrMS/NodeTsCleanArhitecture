@@ -1,15 +1,18 @@
 import jwt,{ JwtPayload } from 'jsonwebtoken';
 import { cfg } from './config.js';
-import { Database } from './database';
+import { Database } from '../BLL/database.js';
 
+// секрет
 const authHeader = 'x-auth-key';
 
+// класс для создания и взаимодействия с jwt токенами
 export class Jwt {
   db: Database;
   constructor(db:Database) {
     this.db = db;
   }
 
+  // функция создания токена
   createToken(id:number, role:string) {
     const token = jwt.sign(
       {
@@ -23,6 +26,7 @@ export class Jwt {
     return token;
   }
 
+  /// функция проверки jwt токена
   async auntentification(token:string) {
     try {
       const decoded = jwt.verify(token, cfg.jwt.secret, {
@@ -47,6 +51,7 @@ export class Jwt {
     }
   }
 
+  // функция проверки jwt токена для teamlead
   async auntentificationAdmin(token:string) {
     try {
       const decoded = jwt.verify(token, cfg.jwt.secret, {
