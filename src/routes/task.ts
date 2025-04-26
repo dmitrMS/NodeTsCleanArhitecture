@@ -31,10 +31,12 @@ task.delete('/task/delete/:task_id', async (req, res) => {
 });
 
 // метод для вывода списка заданий
-task.get('/task/list', async (req, res) => {
+task.get('/task/list/:team_id', async (req, res) => {
   const token = req.headers[authHeader] as string;
-  const { team_id } = req.body;
-  const verifyWork = await taskHandler.list(token, team_id);
+  const { team_id } = req.params;
+  const teamId = parseInt(team_id, 10);
+  
+  const verifyWork = await taskHandler.list(token, teamId);
 
   return res.status(200).json(verifyWork);
 });

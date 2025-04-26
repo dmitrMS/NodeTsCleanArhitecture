@@ -1,52 +1,62 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, Prisma } from '@prisma/client';
+
 const prisma = new PrismaClient();
+
 async function main() {
-  const mark = await prisma.user.upsert({
-    // where: { login: 'mark160403' },
-    update: {},
+  const worker = await prisma.user.upsert({
+    where: { id: 1 }, // Условие поиска
+    update: {}, // Пока не обновляем
     create: {
-      login: 'mark160403',
-      password: 'mark66',
-      created_at: '2024-02-27T00:00:00.000Z',
-      updated_at: '2024-02-28T00:00:00.000Z',
+      login: 'worker',
+      password: 'worker',
+      role: 'worker',
+      created_at: new Date('2024-02-27T00:00:00.000Z'),
+      updated_at: new Date('2024-02-28T00:00:00.000Z'),
       work_time: {
         create: {
-          begin_date: '2024-02-27T00:00:00.000Z',
-          end_date: '2024-02-28T00:00:00.000Z',
-          created_at: '2024-02-27T00:00:00.000Z',
-          updated_at: '2024-02-28T00:00:00.000Z'
+          task_name: 'поработать',
+          begin_date: new Date('2024-02-27T00:00:00.000Z'),
+          end_date: new Date('2024-02-28T00:00:00.000Z'),
+          created_at: new Date('2024-02-27T00:00:00.000Z'),
+          updated_at: new Date('2024-02-28T00:00:00.000Z')
         }
       }
     }
   });
+
   const dmitry = await prisma.user.upsert({
-    // where: { login: 'dmitry' },
+    where: { id: 2 },
     update: {},
     create: {
       login: 'dmitry',
       password: 'P@ssw0rd',
-      created_at: '2024-02-27T00:00:00.000Z',
-      updated_at: '2024-02-28T00:00:00.000Z',
+      role: 'teamlead',
+      created_at: new Date('2024-02-27T00:00:00.000Z'),
+      updated_at: new Date('2024-02-28T00:00:00.000Z'),
       work_time: {
         create: [
           {
-            begin_date: '2024-02-27T00:00:00.000Z',
-          end_date: '2024-02-28T00:00:00.000Z',
-          created_at: '2024-02-27T00:00:00.000Z',
-          updated_at: '2024-02-28T00:00:00.000Z'
+            task_name: 'поделать диплом',
+            begin_date: new Date('2024-02-27T00:00:00.000Z'),
+            end_date: new Date('2024-02-28T00:00:00.000Z'),
+            created_at: new Date('2024-02-27T00:00:00.000Z'),
+            updated_at: new Date('2024-02-28T00:00:00.000Z')
           },
           {
-            begin_date: '2024-03-01T00:00:00.000Z',
-          end_date: '2024-03-02T00:00:00.000Z',
-          created_at: '2024-03-01T00:00:00.000Z',
-          updated_at: '2024-03-02T00:00:00.000Z'
+            task_name: 'погулять',
+            begin_date: new Date('2024-03-01T00:00:00.000Z'),
+            end_date: new Date('2024-03-02T00:00:00.000Z'),
+            created_at: new Date('2024-03-01T00:00:00.000Z'),
+            updated_at: new Date('2024-03-02T00:00:00.000Z')
           }
         ]
       }
     }
   });
-  console.log({ mark, dmitry });
+
+  console.log({ worker, dmitry });
 }
+
 main()
   .then(async () => {
     await prisma.$disconnect();

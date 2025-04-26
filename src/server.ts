@@ -15,10 +15,10 @@ import swaggerFile from '../swagger_output.json';
 
 const app: Express = express();
 // определение параметров для cors
-const corsOptions = {
-  origin: 'http://localhost:8081',
-  optionSuccessStatus: 200
-};
+// const corsOptions = {
+//   origin: 'http://localhost:8081',
+//   optionSuccessStatus: 200
+// };
 
 // использование парсера json
 app.use(bodyParser.json());
@@ -28,7 +28,8 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(logMiddleware);
 
 // использование cors
-app.use(cors(corsOptions));
+// app.use(cors(corsOptions));
+app.use(cors());
 
 // использование swagger
 app.use('/doc', swaggerUI.serve, swaggerUI.setup(swaggerFile));

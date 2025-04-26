@@ -21,6 +21,7 @@ export class TaskHandler {
   // контроллер для удаления задания
   async delete(token: string, id_task: number) {
     const verifyUser = await this.jwt.auntentificationAdmin(token);
+    console.log(id_task);
 
     return verifyUser !== null ? await this.db.deleteTask(id_task) : null;
   }

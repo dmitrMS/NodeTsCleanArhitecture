@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { Jwt } from '../DAL/jwt';
 import { Database } from '../BLL/database';
 import { TrackHandler } from '../server/handler/track/index';
+// import { Request, Response } from 'express';
 
 export const track = Router();
 const db = new Database();
@@ -31,7 +32,7 @@ track.post('/track/stop', async (req, res) => {
 });
 
 // метод для изменения работы
-track.put('/track/update', async (req, res) => {
+track.patch('/track/update', async (req, res) => {
   const token = req.headers[authHeader] as string;
   const { id_work, task_name, begin_date, end_date } = req.body;
   const result = await trackHandler.update(
@@ -68,26 +69,43 @@ track.get('/track/status', async (req, res) => {
 // метод для выода списка команд
 track.get('/track/list', async (req, res) => {
   const token = req.headers[authHeader] as string;
-  const { team_id } = req.body;
-  const verifyWork = await trackHandler.list(token, team_id);
+  // const { team_id } = req.body;
+
+  const verifyWork = await trackHandler.listNoTeam(token);
+
+  return res.status(200).json(verifyWork);
+});
+
+// метод для выода списка команд
+track.get('/track/list/:team_id', async (req, res) => {
+  const token = req.headers[authHeader] as string;
+  // const { team_id } = req.body;
+  const { team_id } = req.params;
+  const teamId = parseInt(team_id, 10);
+
+  const verifyWork = await trackHandler.list(token, teamId);
 
   return res.status(200).json(verifyWork);
 });
 
 // метод для вывода списка командных работ пользователя
-track.get('/team/track/list', async (req, res) => {
+track.get('/team/track/list/:team_id', async (req, res) => {
   const token = req.headers[authHeader] as string;
-  const { team_id } = req.body;
-  const verifyWork = await trackHandler.listTeam(token, team_id);
+  const { team_id } = req.params;
+  const teamId = parseInt(team_id, 10);
+
+  const verifyWork = await trackHandler.listTeam(token, teamId);
 
   return res.status(200).json(verifyWork);
 });
 
 // метод для вывода списка работ на определённое задание 
-track.get('/task/track/list', async (req, res) => {
+track.get('/task/track/lis/:task_id', async (req, res) => {
   const token = req.headers[authHeader] as string;
-  const { task_id } = req.body;
-  const verifyWork = await trackHandler.listTask(token, task_id);
+  const { task_id } = req.params;
+  const taskId = parseInt(task_id, 10);
+
+  const verifyWork = await trackHandler.listTask(token, taskId);
 
   return res.status(200).json(verifyWork);
 });

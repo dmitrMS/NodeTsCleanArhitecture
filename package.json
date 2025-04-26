@@ -9,7 +9,8 @@
     "build:live": "nodemon --watch 'src/*.ts' --exec 'ts-node' src/server.ts",
     "lint": "eslint .",
     "prettier-format": "prettier --config .prettierrc '.' --write",
-    "swagger-autogen": "node swagger.js"
+    "swagger-autogen": "node swagger.js",
+    "seed": "node prisma/seed.js"
   },
   "prisma": {
     "seed": "prisma/seed.js"

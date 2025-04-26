@@ -46,6 +46,7 @@ auth.post('/auth/connect', async (req, res) => {
 // метод для получения информации о пользователе
 auth.get('/auth/data', async (req, res) => {
   const token = req.headers[authHeader] as string;
+  // console.log(token);console.log(req.headers);
   const verifyUser = await authHandler.getDate(token);
 
   return verifyUser !== null
@@ -57,10 +58,10 @@ auth.get('/auth/data', async (req, res) => {
 });
 
 // вывод для получения информации об teamlead команды
-auth.get('/admin/data', async (req, res) => {
+auth.get('/admin/data/:admin_id', async (req, res) => {
   const token = req.headers[authHeader] as string;
-  const { admin_id } = req.body;
-  const verifyUser = await authHandler.getTeamleadDate(token, admin_id);
+  // const { admin_id } = req.body;
+  const verifyUser = await authHandler.getTeamleadDate(token, Number(req.params.admin_id));
 
   return verifyUser !== null
     ? res.status(200).json(verifyUser)
