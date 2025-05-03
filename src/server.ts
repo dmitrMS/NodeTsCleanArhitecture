@@ -2,8 +2,10 @@ import express from 'express';
 import { Express } from 'express';
 import bodyParser from 'body-parser';
 import { auth } from './routes/auth';
+import { project } from './routes/project';
 import { notification } from './routes/notification';
 import { task } from './routes/task';
+import { status } from './routes/status';
 import { team } from './routes/team';
 import { track } from './routes/track';
 import { user_team } from './routes/user_team';
@@ -36,8 +38,10 @@ app.use('/doc', swaggerUI.serve, swaggerUI.setup(swaggerFile));
 
 // использование путей, которые находятся в отдельных файлах
 app.use(auth);
+app.use(project);
 app.use(notification);
 app.use(task);
+app.use(status);
 app.use(team);
 app.use(track);
 app.use(user_team);

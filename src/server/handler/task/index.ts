@@ -12,16 +12,23 @@ export class TaskHandler {
   }
 
   // контроллер создания задания
-  async create(token: string, name: string, team_id: number) {
-    const verifyUser = await this.jwt.auntentificationAdmin(token);
+  async create(token: string, name: string, project_id: number) {
+    const verifyUser = await this.jwt.auntentification(token);
 
-    return verifyUser !== null ? await this.db.createTask(name, team_id) : null;
+    return verifyUser !== null ? await this.db.createTask(name, project_id) : null;
+  }
+
+  // контроллер редактирования задания
+  async update(token: string, task_id: number, name: string, description: string, status_id: number, begin_date: Date, end_date: Date) {
+    const verifyUser = await this.jwt.auntentification(token);
+
+    return verifyUser !== null ? await this.db.updateTask(task_id, name, description, status_id, begin_date, end_date) : null;
   }
 
   // контроллер для удаления задания
   async delete(token: string, id_task: number) {
-    const verifyUser = await this.jwt.auntentificationAdmin(token);
-    console.log(id_task);
+    const verifyUser = await this.jwt.auntentification(token);
+    // console.log(id_task);
 
     return verifyUser !== null ? await this.db.deleteTask(id_task) : null;
   }
@@ -38,8 +45,8 @@ export class TaskHandler {
       updated_at: Date;
     }
 
-    const usersTeam = await this.db.getTeamById(team_id) as Team;
+    // const usersTeam = await this.db.getTeamById(team_id) as Team;
 
-    return verifyUser !== null ? await this.db.getTeamTasks(usersTeam) : null;
+    // return verifyUser !== null ? await this.db.getTeamTasks(usersTeam) : null;
   }
 }

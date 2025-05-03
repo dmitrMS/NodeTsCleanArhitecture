@@ -213,6 +213,57 @@ export class Database {
     return verifyWork !== null ? verifyWork : null;
   }
 
+    // найти проект по идентификатору
+    async getProjectById(id: number) {
+      const verifyWork = await prisma.project.findFirst({
+        where: {
+          id: id
+        }
+      });
+  
+      return verifyWork !== null ? verifyWork : null;
+    }
+
+      // вывод списка заданий отдельной команды отдельного пользователя
+  async getProjectTasks(userProject: {
+    id: number;
+    name: string;
+    user_id: number;
+    created_at: Date;
+    updated_at: Date;
+  }) {
+    try {
+      const teamProjects = await prisma.task.findMany({
+        where: {
+          project_id: userProject.id
+        }
+      });
+
+      return teamProjects;
+    } catch {
+      return null;
+    }
+  }
+
+  // вывод всех статусов
+  async getStatus() {
+    const verifyWork = await prisma.status.findMany({
+    });
+
+    return verifyWork;
+  }
+
+  // вывод команды по проекту
+  async getProjectTeam(project_id: number) {
+    const verifyWork = await prisma.team.findFirst({
+      where: {
+        project_id: project_id
+      }
+    });
+
+    return verifyWork;
+  }
+
   ///////////////////////////////////////////////////////////////////
 
   // найти пользователя по логину
@@ -275,12 +326,31 @@ export class Database {
   }
 
   // создать задание
-  async createTask(name: string, team_id: number,project_id: number) {
+  async createTask(name: string, project_id: number) {
     const result = await prisma.task.create({
       data: {
         name: name,
-        team_id: team_id,
+        // team_id: team_id,
         project_id: project_id
+      }
+    });
+
+    return result;
+  }
+
+  // обновить задание
+  async updateTask( task_id: number,name: string, description: string, status_id: number, begin_date: Date, end_date: Date) {
+    const result = await prisma.task.update({
+      where: {
+        id: task_id
+      },
+      data: {
+        name: name,
+        // team_id: team_id,
+        description: description,
+        status_id: status_id,
+        begin_date: begin_date,
+        end_date: end_date,
       }
     });
 
@@ -310,11 +380,11 @@ export class Database {
   }
 
   // создать команду
-  async createTeam(id: number, name: string) {
+  async createTeam(id: number, project_id: number) {
     const result = await prisma.team.create({
       data: {
         admin_id: id,
-        name: name
+        project_id: project_id
       }
     });
 
@@ -377,14 +447,14 @@ export class Database {
       created_at: Date;
       updated_at: Date;
     }[] = [];
-
-    for (const element of usersTeams) {
-      teamsTasks = await prisma.task.findMany({
-        where: {
-          team_id: element.id
-        }
-      });
-    }
+//////////////////////////////////////////////////////////////////////////консервация
+    // for (const element of usersTeams) {
+    //   teamsTasks = await prisma.task.findMany({
+    //     where: {
+    //       team_id: element.id
+    //     }
+    //   });
+    // }
 
     return teamsTasks;
   }
@@ -488,7 +558,8 @@ export class Database {
     const result = await prisma.user_team.create({
       data: {
         user_id: user_id,
-        team_id: team_id
+        team_id: team_id,
+        role_id: 1
       }
     });
 
@@ -521,7 +592,7 @@ export class Database {
     return null;
   }
 
-  //вывод спика команд пользователя
+  //вывод пользователей команды
   async getUsersTeam(team_id: number) {
     const verifyWork = await prisma.user_team.findMany({
       where: {

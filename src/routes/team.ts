@@ -12,8 +12,8 @@ const authHeader = 'x-auth-key';
 // метод для создания команды
 team.post('/team/create', async (req, res) => {
   const token = req.headers[authHeader] as string;
-  const { name } = req.body;
-  const verifyWork = await teamHandler.create(token, name);
+  const { name, project_id } = req.body;
+  const verifyWork = await teamHandler.create(token, project_id);
 
   return verifyWork !== null
     ? res.status(200).json(verifyWork)

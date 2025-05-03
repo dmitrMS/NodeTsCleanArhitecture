@@ -100,7 +100,7 @@ track.get('/team/track/list/:team_id', async (req, res) => {
 });
 
 // метод для вывода списка работ на определённое задание 
-track.get('/task/track/lis/:task_id', async (req, res) => {
+track.get('/task/track/list/:task_id', async (req, res) => {
   const token = req.headers[authHeader] as string;
   const { task_id } = req.params;
   const taskId = parseInt(task_id, 10);

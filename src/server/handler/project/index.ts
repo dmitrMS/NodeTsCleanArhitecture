@@ -15,25 +15,33 @@ export class ProjectHandler {
   async create(token: string, project_name: string, user_id: number) {
     const verifyUser = await this.jwt.auntentification(token);
 
+    const project = await this.db.createProject(
+      verifyUser ? verifyUser.id : NaN,
+      project_name
+    )
+
+    const team = await this.db.createTeam(
+      verifyUser ? verifyUser.id : NaN,
+      project.id,
+    );
+
+    await this.db.createUserTeam(verifyUser ? verifyUser.id : NaN, team.id);
+    // return team.id !== null
+    //   ? await this.db.createUserTeam(verifyUser ? verifyUser.id : NaN, team.id)
+    //   : null;
     return verifyUser !== null
-      ? await this.db.createProject(
-          verifyUser ? verifyUser.id : NaN,
-          project_name,
-        )
+      ? project
       : null;
   }
 
   //контроллер для обновления данных о работе
-  async update(
-    token: string,
-    project_name: string,
-  ) {
+  async update(token: string, project_name: string) {
     const verifyUser = await this.jwt.auntentification(token);
 
     return verifyUser !== null
       ? await this.db.updateProject(
           verifyUser ? verifyUser.id : NaN,
-          project_name,
+          project_name
         )
       : null;
   }
@@ -45,21 +53,38 @@ export class ProjectHandler {
     return verifyUser !== null ? await this.db.deleteProject(id_project) : null;
   }
 
-//   // контроллер для проверки неоконченной работы
-//   async status(token: string) {
-//     const verifyUser = await this.jwt.auntentification(token);
+  //   // контроллер для проверки неоконченной работы
+  //   async status(token: string) {
+  //     const verifyUser = await this.jwt.auntentification(token);
 
-//     return verifyUser !== null
-//       ? await this.db.getProjectStatus(verifyUser ? verifyUser.id : NaN)
-//       : null;
-//   }
+  //     return verifyUser !== null
+  //       ? await this.db.getProjectStatus(verifyUser ? verifyUser.id : NaN)
+  //       : null;
+  //   }
 
   // контроллер для вывода списка работ пользователя
   async list(token: string) {
     const verifyUser = await this.jwt.auntentification(token);
 
     return verifyUser !== null
-      ?  await this.db.getUsersProjects(verifyUser ? verifyUser.id : NaN)
+      ? await this.db.getUsersProjects(verifyUser ? verifyUser.id : NaN)
       : null;
+  }
+
+  // контроллер для вывода списка заданий команды
+  async listTasks(token: string, project_id: number) {
+    const verifyUser = await this.jwt.auntentification(token);
+
+    interface Project {
+      id: number;
+      name: string;
+      user_id: number;
+      created_at: Date;
+      updated_at: Date;
+    }
+
+    const project = (await this.db.getProjectById(project_id)) as Project;
+
+    return verifyUser !== null ? await this.db.getProjectTasks(project) : null;
   }
 }

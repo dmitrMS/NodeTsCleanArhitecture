@@ -7,14 +7,14 @@ import { ProjectHandler } from '../server/handler/project/index';
 export const project = Router();
 const db = new Database();
 const jwt = new Jwt(db);
-const trackHandler = new ProjectHandler(db, jwt);
+const projectHandler = new ProjectHandler(db, jwt);
 const authHeader = 'x-auth-key';
 
 // метод чтобы создать проект
 project.post('/project/create', async (req, res) => {
   const token = req.headers[authHeader] as string;
   const { project_name, user_id } = req.body;
-  const result = await trackHandler.create(token, project_name, user_id);
+  const result = await projectHandler.create(token, project_name, user_id);
 
   return result !== null
     ? res.status(200).json(result)
@@ -25,7 +25,7 @@ project.post('/project/create', async (req, res) => {
 project.patch('/project/update', async (req, res) => {
   const token = req.headers[authHeader] as string;
   const { project_name} = req.body;
-  const result = await trackHandler.update(
+  const result = await projectHandler.update(
     token,
     project_name,
   );
@@ -38,7 +38,7 @@ project.patch('/project/update', async (req, res) => {
 // сетод для удаления проекта
 project.delete('/project/delete/:id_project', async (req, res) => {
   const token = req.headers[authHeader] as string;
-  await trackHandler.delete(token, Number(req.params.id_project));
+  await projectHandler.delete(token, Number(req.params.id_project));
 
   return res.status(200).json({ message: 'Проект удалён' });
 });
@@ -53,10 +53,19 @@ project.delete('/project/delete/:id_project', async (req, res) => {
 //     : res.status(200).json(null);
 // });
 
-// метод для выода списка ghjtrnjd
+// метод для вывода списка проектов
 project.get('/project/list', async (req, res) => {
   const token = req.headers[authHeader] as string;
-  const verifyWork = await trackHandler.list(token);
+  const verifyWork = await projectHandler.list(token);
+
+  return res.status(200).json(verifyWork);
+});
+
+// метод для вывода списка заданий
+project.get('/project/tasks/list/:project_id', async (req, res) => {
+  const token = req.headers[authHeader] as string;
+
+  const verifyWork = await projectHandler.listTasks(token, Number(req.params.project_id));
 
   return res.status(200).json(verifyWork);
 });

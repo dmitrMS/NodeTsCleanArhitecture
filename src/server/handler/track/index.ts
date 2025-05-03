@@ -57,7 +57,6 @@ export class TrackHandler {
   // контроллер для удаления работы
   async delete(token: string, id_work: number) {
     const verifyUser = await this.jwt.auntentification(token);
-    console.log(id_work);
 
     return verifyUser !== null ? await this.db.deleteWorkTime(id_work) : null;
   }

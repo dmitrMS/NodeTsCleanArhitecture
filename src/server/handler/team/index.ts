@@ -13,9 +13,9 @@ export class TeamHandler {
   
 
     // контроллер для создания команды
-    async create(token: string,name: string) {
+    async create(token: string, project_id: number) {
       const verifyUser = await this.jwt.auntentificationAdmin(token);
-      const team=await this.db.createTeam(verifyUser ? verifyUser.id : NaN,name)
+      const team=await this.db.createTeam(verifyUser ? verifyUser.id : NaN, project_id)
   
       return team.id !== null
         ? await this.db.createUserTeam(verifyUser? verifyUser.id : NaN,team.id)

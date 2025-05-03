@@ -21,10 +21,12 @@ export class UserTeamHandler {
     }
   
     // контроллер для вывода списка участников команды
-    async list(token: string,team_id : number) {
-      const verifyUser = await this.jwt.auntentificationAdmin(token);
+    async list(token: string,project_id : number) {
+      const verifyUser = await this.jwt.auntentification(token);
 
-      const userTeam=await this.db.getUsersTeam(team_id);
+      const team=await this.db.getProjectTeam(project_id);
+
+      const userTeam=await this.db.getUsersTeam(team ? team.id : NaN);
 
       const users = [];
 

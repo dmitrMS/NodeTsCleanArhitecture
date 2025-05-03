@@ -20,10 +20,10 @@ user_team.delete('/user_team/delete/:user_id/:team_id', async (req, res) => {
 });
 
 // метод для вывода списка участников команды
-user_team.get('/user_team/list/:team_id', async (req, res) => {
+user_team.get('/user_team/list/:project_id', async (req, res) => {
     const token = req.headers[authHeader] as string;
     // const { team_id } = req.body;
-    const verifyWork = await userTeamHandler.list(token,Number(req.params.team_id));
+    const verifyWork = await userTeamHandler.list(token,Number(req.params.project_id));
   
     return verifyWork !== null
       ? res.status(200).json(verifyWork)

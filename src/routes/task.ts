@@ -12,8 +12,19 @@ const authHeader = 'x-auth-key';
 // метод для создания командного задания
 task.post('/task/create', async (req, res) => {
   const token = req.headers[authHeader] as string;
-  const { name, team_id } = req.body;
-  const verifyWork = await taskHandler.create(token, name, team_id);
+  const { name, project_id } = req.body;
+  const verifyWork = await taskHandler.create(token, name, project_id);
+
+  return verifyWork !== null
+    ? res.status(200).json(verifyWork)
+    : res.status(200).json(null);
+});
+
+// метод для создания командного задания
+task.patch('/task/update', async (req, res) => {
+  const token = req.headers[authHeader] as string;
+  const { task_id, name,description, status_id, begin_date, end_date } = req.body;
+  const verifyWork = await taskHandler.update(token,task_id, name, description, status_id, begin_date, end_date);
 
   return verifyWork !== null
     ? res.status(200).json(verifyWork)
