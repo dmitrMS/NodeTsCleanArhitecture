@@ -9,7 +9,7 @@ datasource db {
 }
 
 model user {
-  id         Int         @id @default(autoincrement())
+  id         Int        @id @default(autoincrement())
   login      String     @db.VarChar
   password   String     @db.VarChar
   role       String     @db.VarChar
@@ -19,6 +19,8 @@ model user {
   work_time  work_time[]
   notification  notification[]
   project    project[]
+  authoredTasks  task[] @relation("TaskAuthor")
+  executedTasks  task[] @relation("TaskExecutor")
 }
 
 model user_team {
@@ -55,9 +57,13 @@ model task {
   project_id Int
   begin_date DateTime?   
   end_date   DateTime? 
+  author_id  Int
+  executor_id  Int?
   created_at DateTime   @default(now())
   updated_at DateTime   @default(now())
   task_worker  task_worker[]
+  author     user        @relation(name: "TaskAuthor",fields: [author_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_task_author")
+  executor   user?       @relation(name: "TaskExecutor",fields: [executor_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_task_executor")
   project    project     @relation(fields: [project_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "project")
   status     status?     @relation(fields: [status_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "status")
   work_time  work_time[]

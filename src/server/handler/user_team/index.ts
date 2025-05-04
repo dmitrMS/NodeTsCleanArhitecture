@@ -39,6 +39,7 @@ export class UserTeamHandler {
         }) : undefined;
         // console.log(numTeamWorks);
         const item = {
+          id: user? user.id : undefined,
           login: user? user.login : undefined,
           role: user ? user.role : undefined,
           numTeamWorks: numTeamWorks ? numTeamWorks.length : NaN,

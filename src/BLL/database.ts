@@ -264,6 +264,29 @@ export class Database {
     return verifyWork;
   }
 
+  async getUsersWorkerProjects(id: number) {
+    const teamUsers = await prisma.user_team.findMany({
+      where: {
+        user_id: id
+      }
+    });
+    let userTeams = [];
+
+    for (const element of teamUsers) {
+      const item = await new Database().getTeamById(element.team_id);
+      userTeams.push(item);
+    }
+
+    let userProjects = [];
+
+    for (const element of userTeams) {
+      const item = await new Database().getProjectById(element ? element.project_id : NaN);
+      userProjects.push(item);
+    }
+
+    return userProjects;
+  }
+
   ///////////////////////////////////////////////////////////////////
 
   // найти пользователя по логину
@@ -326,12 +349,13 @@ export class Database {
   }
 
   // создать задание
-  async createTask(name: string, project_id: number) {
+  async createTask(name: string, project_id: number, author_id: number) {
     const result = await prisma.task.create({
       data: {
         name: name,
         // team_id: team_id,
-        project_id: project_id
+        project_id: project_id,
+        author_id: author_id
       }
     });
 
@@ -339,7 +363,7 @@ export class Database {
   }
 
   // обновить задание
-  async updateTask( task_id: number,name: string, description: string, status_id: number, begin_date: Date, end_date: Date) {
+  async updateTask( task_id: number,name: string, description: string, status_id: number, begin_date: Date, end_date: Date, executor_id: number) {
     const result = await prisma.task.update({
       where: {
         id: task_id
@@ -351,6 +375,7 @@ export class Database {
         status_id: status_id,
         begin_date: begin_date,
         end_date: end_date,
+        executor_id: executor_id
       }
     });
 
@@ -602,6 +627,17 @@ export class Database {
 
     return verifyWork;
   }
+
+  // //вывод пользователей команды
+  // async getUsersWorkerProjects(id: number) {
+  //   const verifyWork = await prisma.user_team.findMany({
+  //     where: {
+  //       user_id: id
+  //     }
+  //   });
+
+  //   return verifyWork;
+  // }
 }
 
 export default prisma;

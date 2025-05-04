@@ -33,7 +33,7 @@ export class TeamHandler {
   
     // контроллер для добавления учатсника в команду
     async addUserTeam(token: string,login: string,team_id: number) {
-      const verifyUser = await this.jwt.auntentificationAdmin(token);
+      const verifyUser = await this.jwt.auntentification(token);
       const invitedUser=await this.db.findUserByLogin(login);
   
       return invitedUser !== null
