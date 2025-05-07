@@ -12,13 +12,15 @@ export class NotificationHandler {
   }
 
   // контроллер для обновления статуса уведомления
-  async updateTeam(token : string, notification_id : number, team_id : number) {
+  async updateTeam(token : string, notification_id : number, project_id : number) {
     const verifyUser = await this.jwt.auntentification(token);
 
+
+    const team = await this.db.getProjectTeam(project_id);
     await this.db.updateStatusNotification(notification_id);
 
     return verifyUser !== null
-      ? await this.db.createUserTeam(verifyUser ? verifyUser.id : NaN,team_id)
+      ? await this.db.createUserTeam(verifyUser ? verifyUser.id : NaN,team ? team.id : NaN)
       : null;
   }
  

@@ -1,8 +1,8 @@
 import { Jwt } from '../../../DAL/jwt';
 import { Database } from '../../../BLL/database';
 
-// класс, отвечающий за работу с заданиями
-export class RoleHandler {
+// класс, отвечающий за работу с приоритетами
+export class PriorityHandler {
   db: Database;
   jwt: Jwt;
 
@@ -15,6 +15,6 @@ export class RoleHandler {
   async list(token: string) {
     const verifyUser = await this.jwt.auntentification(token);
 
-    return verifyUser !== null ? await this.db.getRole() : null;
+    return verifyUser !== null ? await this.db.getPriority() : null;
   }
 }

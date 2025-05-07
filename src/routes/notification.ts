@@ -12,11 +12,11 @@ const authHeader = 'x-auth-key';
 // метод для обновления данных уведомления
 notification.patch('/notification/update', async (req, res) => {
   const token = req.headers[authHeader] as string;
-  const { notification_id, team_id } = req.body;
+  const { notification_id, project_id } = req.body;
   const verifyWork = await notificationHandler.updateTeam(
     token,
     notification_id,
-    team_id
+    project_id
   );
 
   return verifyWork !== null

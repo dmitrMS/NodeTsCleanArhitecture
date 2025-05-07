@@ -1,19 +1,19 @@
 import { Router } from 'express';
 import { Jwt } from '../DAL/jwt';
 import { Database } from '../BLL/database';
-import { RoleHandler } from '../server/handler/role/index';
+import { PriorityHandler } from '../server/handler/priority/index';
 
-export const role = Router();
+export const priority = Router();
 const db = new Database();
 const jwt = new Jwt(db);
-const roleHandler = new RoleHandler(db, jwt);
+const priorityHandler = new PriorityHandler(db, jwt);
 const authHeader = 'x-auth-key';
 
 // метод для вывода списка заданий
-role.get('/role/list', async (req, res) => {
+priority.get('/priority/list', async (req, res) => {
   const token = req.headers[authHeader] as string;
   
-  const verifyWork = await roleHandler.list(token);
+  const verifyWork = await priorityHandler.list(token);
 
   return res.status(200).json(verifyWork);
 });

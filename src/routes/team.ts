@@ -54,8 +54,8 @@ team.get('/team/info', async (req, res) => {
 // метод для добавления командного пользователя
 team.post('/team/add_user', async (req, res) => {
   const token = req.headers[authHeader] as string;
-  const { login, team_id } = req.body;
-  const verifyWork = await teamHandler.addUserTeam(token, login, team_id);
+  const { login, project_id, project_name } = req.body;
+  const verifyWork = await teamHandler.addUserTeam(token, login, project_id, project_name);
 
   return verifyWork !== null
     ? res.status(200).json(verifyWork)

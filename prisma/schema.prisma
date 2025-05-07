@@ -54,6 +54,7 @@ model task {
   name       String     @db.VarChar
   description    String?     @db.VarChar
   status_id  Int?
+  priority_id  Int?
   project_id Int
   begin_date DateTime?   
   end_date   DateTime? 
@@ -61,12 +62,15 @@ model task {
   executor_id  Int?
   created_at DateTime   @default(now())
   updated_at DateTime   @default(now())
-  task_worker  task_worker[]
   author     user        @relation(name: "TaskAuthor",fields: [author_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_task_author")
   executor   user?       @relation(name: "TaskExecutor",fields: [executor_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_task_executor")
   project    project     @relation(fields: [project_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "project")
   status     status?     @relation(fields: [status_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "status")
+  priority   priority?   @relation(fields: [priority_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "priority")
   work_time  work_time[]
+  task_worker  task_worker[]
+  mainTasks  dependency[] @relation("MainTask")
+  dependencyTasks  dependency[] @relation("DependencyTask")
 }
 
 model team {
@@ -86,7 +90,8 @@ model notification {
   user_id   Int 
   status    Boolean?    @default(false)
   reason    String     @db.VarChar
-  data_id    Int
+  data_id   Int
+  data_name String?
   text    String?     @db.VarChar
   created_at DateTime   @default(now())
   updated_at DateTime   @default(now())
@@ -110,6 +115,24 @@ model status {
   created_at DateTime   @default(now())
   updated_at DateTime   @default(now())
   task       task[]
+}
+
+model priority {
+  id         Int        @id @default(autoincrement())
+  name       String     @db.VarChar
+  created_at DateTime   @default(now())
+  updated_at DateTime   @default(now())
+  task       task[]
+}
+
+model dependency {
+  id         Int         @id @default(autoincrement())
+  main_task_id    Int  
+  dependency_task_id    Int   
+  created_at DateTime   @default(now())
+  updated_at DateTime   @default(now())
+  main_task  task        @relation(name: "MainTask",fields: [main_task_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_main_task")
+  dependency_task   task       @relation(name: "DependencyTask",fields: [dependency_task_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_dependency_task")
 }
 
 model role {

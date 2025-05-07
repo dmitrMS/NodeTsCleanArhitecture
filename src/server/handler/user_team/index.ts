@@ -19,6 +19,15 @@ export class UserTeamHandler {
         ? await this.db.deleteUserTeam(user_id, team_id)
         : null;
     }
+
+    // контроллер для удаления участника из команды
+    async update(token: string,user_id : number, role_id : number) {
+      const verifyUser = await this.jwt.auntentification(token);
+  
+      return verifyUser !== null
+        ? await this.db.updateUsersTeam(user_id, role_id)
+        : null;
+    }
   
     // контроллер для вывода списка участников команды
     async list(token: string,project_id : number) {

@@ -163,10 +163,10 @@ export class Database {
 
     return null;
   }
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
   // создать задание
-  async createProject( user_id: number,project_name: string) {
+  async createProject(user_id: number, project_name: string) {
     const result = await prisma.project.create({
       data: {
         name: project_name,
@@ -177,20 +177,19 @@ export class Database {
     return result;
   }
 
-    // обновить рабочее время по заданию
-    async updateProject(project_id: number, project_name: string) {
-      const result = await prisma.project.update({
-        where: {
-          id: project_id
-        },
-        data: {
-          name: project_name
-        }
-      });
-  
-      return result;
-    }
-  
+  // обновить рабочее время по заданию
+  async updateProject(project_id: number, project_name: string) {
+    const result = await prisma.project.update({
+      where: {
+        id: project_id
+      },
+      data: {
+        name: project_name
+      }
+    });
+
+    return result;
+  }
 
   // удалить работу
   async deleteProject(id_project: number) {
@@ -213,18 +212,18 @@ export class Database {
     return verifyWork !== null ? verifyWork : null;
   }
 
-    // найти проект по идентификатору
-    async getProjectById(id: number) {
-      const verifyWork = await prisma.project.findFirst({
-        where: {
-          id: id
-        }
-      });
-  
-      return verifyWork !== null ? verifyWork : null;
-    }
+  // найти проект по идентификатору
+  async getProjectById(id: number) {
+    const verifyWork = await prisma.project.findFirst({
+      where: {
+        id: id
+      }
+    });
 
-      // вывод списка заданий отдельной команды отдельного пользователя
+    return verifyWork !== null ? verifyWork : null;
+  }
+
+  // вывод списка заданий отдельной команды отдельного пользователя
   async getProjectTasks(userProject: {
     id: number;
     name: string;
@@ -247,8 +246,21 @@ export class Database {
 
   // вывод всех статусов
   async getStatus() {
-    const verifyWork = await prisma.status.findMany({
-    });
+    const verifyWork = await prisma.status.findMany({});
+
+    return verifyWork;
+  }
+
+  // вывод всех статусов
+  async getRole() {
+    const verifyWork = await prisma.role.findMany({});
+
+    return verifyWork;
+  }
+
+  // вывод всех приоритетов
+  async getPriority() {
+    const verifyWork = await prisma.priority.findMany({});
 
     return verifyWork;
   }
@@ -280,11 +292,46 @@ export class Database {
     let userProjects = [];
 
     for (const element of userTeams) {
-      const item = await new Database().getProjectById(element ? element.project_id : NaN);
+      const item = await new Database().getProjectById(
+        element ? element.project_id : NaN
+      );
       userProjects.push(item);
     }
 
     return userProjects;
+  }
+
+  // создать зависимость
+  async createDependency(main_task_id: number, dependency_task_id: number) {
+    const result = await prisma.dependency.create({
+      data: {
+        main_task_id: main_task_id,
+        dependency_task_id: dependency_task_id
+      }
+    });
+
+    return result;
+  }
+
+  // удалить зависимость
+  async deleteDependency(dependency_id: number) {
+    await prisma.dependency.delete({
+      where: {
+        id: dependency_id
+      }
+    });
+
+    return null;
+  }
+
+  async getTaskDependencies(main_task_id: number) {
+    const verifyWork = await prisma.dependency.findMany({
+      where: {
+        main_task_id: main_task_id
+      }
+    });
+
+    return verifyWork !== null ? verifyWork : null;
   }
 
   ///////////////////////////////////////////////////////////////////
@@ -363,7 +410,16 @@ export class Database {
   }
 
   // обновить задание
-  async updateTask( task_id: number,name: string, description: string, status_id: number, begin_date: Date, end_date: Date, executor_id: number) {
+  async updateTask(
+    task_id: number,
+    name: string,
+    description: string,
+    status_id: number,
+    priority_id: number,
+    begin_date: Date,
+    end_date: Date,
+    executor_id: number
+  ) {
     const result = await prisma.task.update({
       where: {
         id: task_id
@@ -373,6 +429,7 @@ export class Database {
         // team_id: team_id,
         description: description,
         status_id: status_id,
+        priority_id: priority_id,
         begin_date: begin_date,
         end_date: end_date,
         executor_id: executor_id
@@ -472,7 +529,7 @@ export class Database {
       created_at: Date;
       updated_at: Date;
     }[] = [];
-//////////////////////////////////////////////////////////////////////////консервация
+    //////////////////////////////////////////////////////////////////////////консервация
     // for (const element of usersTeams) {
     //   teamsTasks = await prisma.task.findMany({
     //     where: {
@@ -517,13 +574,18 @@ export class Database {
   }
 
   // создание уведомления
-  async createNotification(id: number, user_id: number, team_id: number) {
+  async createNotification(
+    id: number,
+    user_id: number,
+    project_id: number,
+    project_name: string
+  ) {
     const result = await prisma.notification.create({
       data: {
         sender_id: id,
         user_id: user_id,
-        reason: 'team',
-        data_id: team_id
+        reason: project_name,
+        data_id: project_id
       }
     });
 
@@ -532,7 +594,7 @@ export class Database {
 
   // удаление уведомления
   async deleteNotification(id: number) {
-    await prisma.team.delete({
+    await prisma.notification.delete({
       where: {
         id: id
       }
@@ -622,6 +684,20 @@ export class Database {
     const verifyWork = await prisma.user_team.findMany({
       where: {
         team_id: team_id
+      }
+    });
+
+    return verifyWork;
+  }
+
+  //вывод пользователей команды
+  async updateUsersTeam(user_team_id: number, role_id: number) {
+    const verifyWork = await prisma.user_team.update({
+      where: {
+        id: user_team_id
+      },
+      data: {
+        role_id: role_id
       }
     });
 

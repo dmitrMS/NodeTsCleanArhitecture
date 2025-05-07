@@ -19,10 +19,10 @@ export class TaskHandler {
   }
 
   // контроллер редактирования задания
-  async update(token: string, task_id: number, name: string, description: string, status_id: number, begin_date: Date, end_date: Date, execute_id: number) {
+  async update(token: string, task_id: number, name: string, description: string, status_id: number, priority_id: number, begin_date: Date, end_date: Date, execute_id: number) {
     const verifyUser = await this.jwt.auntentification(token);
 
-    return verifyUser !== null ? await this.db.updateTask(task_id, name, description, status_id, begin_date, end_date, execute_id) : null;
+    return verifyUser !== null ? await this.db.updateTask(task_id, name, description, status_id, priority_id, begin_date, end_date, execute_id) : null;
   }
 
   // контроллер для удаления задания
