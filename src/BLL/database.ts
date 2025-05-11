@@ -369,7 +369,10 @@ export class Database {
 
   // регистрация пользователя
   async createUser(login: string, password: string) {
+    try{
+      console.log('log4');
     let salt = await bcrypt.genSalt(10);
+    console.log('log5');
     const result = await prisma.user.create({
       data: {
         login: login,
@@ -379,6 +382,12 @@ export class Database {
     });
 
     return result;
+  } catch (error)
+  {
+    console.log('log7');
+    console.log(error);
+    throw(error);
+  }
   }
 
   // обновить рабочее время по заданию

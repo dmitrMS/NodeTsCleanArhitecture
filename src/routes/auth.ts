@@ -11,13 +11,19 @@ const authHeader = 'x-auth-key';
 
 // метод для регистрации пользователя
 auth.post('/auth/signup', async (req, res) => {
+  try{
   const { login, password } = req.body;
   const token = await authHandler.singUp(login, password);
 
   return res.status(200).json({
     jwt: token
   });
-});
+} catch (error)
+{
+  console.log('log8');
+  console.log(error);
+  throw(error);
+}});
 
 // метод для авторизации пользователя
 auth.post('/auth/signin', async (req, res) => {
