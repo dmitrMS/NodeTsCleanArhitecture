@@ -41,6 +41,7 @@ model work_time {
   user_id    Int  
   task_id    Int?   
   task_name  String?     @db.VarChar
+  description String?    @db.VarChar
   begin_date DateTime   
   end_date   DateTime? 
   created_at DateTime   @default(now())

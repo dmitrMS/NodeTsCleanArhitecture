@@ -75,4 +75,59 @@ export class Jwt {
       return null;
     }
   }
+
+  // async auntentificationProjectHead(token:string, project_id: number) {
+  //   try {
+  //     const decoded = jwt.verify(token, cfg.jwt.secret, {
+  //       ignoreExpiration: false
+  //     });
+
+  //     if (decoded) {
+  //       const id = jwt.decode(token, { complete: true }) as JwtPayload;
+
+  //       interface UserPayload {
+  //         id: number
+  //       }
+
+  //       const verifyUser = await this.db.findUserById(id? id.payload.id : NaN) as UserPayload;
+  //       // const verifyRoleUser = id ? id.payload.role : undefined;
+  //       const verify = { id: verifyUser.id, role: verifyUser };
+
+  //       const team = await this.db.getProjectTeam(project_id);
+  //       const userTeam = await this.db.usersTeamRole(verifyUser ? verifyUser.id : NaN, team ? team.id : NaN)
+
+  //       getUserTeamById
+  //       return verifyUser && (userTeam ? userTeam.role_id : NaN) === 1 ? verify : null;
+  //     }
+  //   } catch (err) {
+  //     return null;
+  //   }
+
+    async auntentificationProjectHead(token:string, user_team_id: number) {
+      try {
+        const decoded = jwt.verify(token, cfg.jwt.secret, {
+          ignoreExpiration: false
+        });
+  
+        if (decoded) {
+          const id = jwt.decode(token, { complete: true }) as JwtPayload;
+  
+          interface UserPayload {
+            id: number
+          }
+  
+          const verifyUser = await this.db.findUserById(id? id.payload.id : NaN) as UserPayload;
+          // const verifyRoleUser = id ? id.payload.role : undefined;
+          const verify = { id: verifyUser.id, role: verifyUser };
+  
+          // const team = await this.db.getProjectTeam(project_id);
+          const userTeam = await this.db.getUserTeamById(user_team_id)
+  
+          // getUserTeamById
+          return verifyUser && (userTeam ? userTeam.role_id : NaN) === 1 ? verify : null;
+        }
+      } catch (err) {
+        return null;
+      }
+  }
 }

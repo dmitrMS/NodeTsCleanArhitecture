@@ -31,42 +31,42 @@ export class Database {
     return verifyWork !== null ? verifyWork : null;
   }
 
-  // вывод всех командных работ отдельного пользователя
-  async getUsersTeamWorkTimes(id: number, team_id: number) {
-    const usersTasks = await this.getTeamTasksById(team_id);
-    let teamWorkTimes = [];
-    for (const element of usersTasks) {
-      const verifyWork = await prisma.work_time.findMany({
-        where: {
-          user_id: id,
-          task_id: element.id
-        }
-      });
-      for (const item of verifyWork) {
-        teamWorkTimes.push(item);
-      }
-    }
+  // // вывод всех командных работ отдельного пользователя
+  // async getUsersTeamWorkTimes(id: number, team_id: number) {
+  //   const usersTasks = await this.getTeamTasksById(team_id);
+  //   let teamWorkTimes = [];
+  //   for (const element of usersTasks) {
+  //     const verifyWork = await prisma.work_time.findMany({
+  //       where: {
+  //         user_id: id,
+  //         task_id: element.id
+  //       }
+  //     });
+  //     for (const item of verifyWork) {
+  //       teamWorkTimes.push(item);
+  //     }
+  //   }
 
-    return teamWorkTimes;
-  }
+  //   return teamWorkTimes;
+  // }
 
-  // вывод всех работ в отдельной команде
-  async getManuUsersTeamWorkTimes(team_id: number) {
-    const usersTasks = await this.getTeamTasksById(team_id);
-    let teamWorkTimes = [];
-    for (const element of usersTasks) {
-      const verifyWork = await prisma.work_time.findMany({
-        where: {
-          task_id: element.id
-        }
-      });
-      for (const item of verifyWork) {
-        teamWorkTimes.push(item);
-      }
-    }
+  // // вывод всех работ в отдельной команде
+  // async getManuUsersTeamWorkTimes(team_id: number) {
+  //   const usersTasks = await this.getTeamTasksById(team_id);
+  //   let teamWorkTimes = [];
+  //   for (const element of usersTasks) {
+  //     const verifyWork = await prisma.work_time.findMany({
+  //       where: {
+  //         task_id: element.id
+  //       }
+  //     });
+  //     for (const item of verifyWork) {
+  //       teamWorkTimes.push(item);
+  //     }
+  //   }
 
-    return teamWorkTimes;
-  }
+  //   return teamWorkTimes;
+  // }
 
   // вывод всех работ пользователя по отдельному командному заданию
   async getManuUsersTaskWorkTimes(task_id: number) {
@@ -450,16 +450,16 @@ export class Database {
     return null;
   }
 
-  // вывести список заданий в отдельной команде
-  async getTasks(id: number) {
-    const verifyWork = await prisma.task.findMany({
-      where: {
-        team_id: id
-      }
-    });
+  // // вывести список заданий в отдельной команде
+  // async getTasks(id: number) {
+  //   const verifyWork = await prisma.task.findMany({
+  //     where: {
+  //       team_id: id
+  //     }
+  //   });
 
-    return verifyWork !== null ? verifyWork : null;
-  }
+  //   return verifyWork !== null ? verifyWork : null;
+  // }
 
   // создать команду
   async createTeam(id: number, project_id: number) {
@@ -541,37 +541,37 @@ export class Database {
     return teamsTasks;
   }
 
-  // вывод списка заданий отдельной команды отдельного пользователя
-  async getTeamTasks(userTeam: {
-    id: number;
-    name: string;
-    admin_id: number;
-    created_at: Date;
-    updated_at: Date;
-  }) {
-    try {
-      const teamTasks = await prisma.task.findMany({
-        where: {
-          team_id: userTeam.id
-        }
-      });
+  // // вывод списка заданий отдельной команды отдельного пользователя
+  // async getTeamTasks(userTeam: {
+  //   id: number;
+  //   name: string;
+  //   admin_id: number;
+  //   created_at: Date;
+  //   updated_at: Date;
+  // }) {
+  //   try {
+  //     const teamTasks = await prisma.task.findMany({
+  //       where: {
+  //         team_id: userTeam.id
+  //       }
+  //     });
 
-      return teamTasks;
-    } catch {
-      return null;
-    }
-  }
+  //     return teamTasks;
+  //   } catch {
+  //     return null;
+  //   }
+  // }
 
-  // вывод списка заданий команды
-  async getTeamTasksById(team_id: number) {
-    const teamTasks = await prisma.task.findMany({
-      where: {
-        team_id: team_id
-      }
-    });
+  // // вывод списка заданий команды
+  // async getTeamTasksById(team_id: number) {
+  //   const teamTasks = await prisma.task.findMany({
+  //     where: {
+  //       team_id: team_id
+  //     }
+  //   });
 
-    return teamTasks;
-  }
+  //   return teamTasks;
+  // }
 
   // создание уведомления
   async createNotification(
@@ -654,7 +654,7 @@ export class Database {
   }
 
   // удалить участника команды
-  async deleteUserTeam(user_id: number, team_id: number) {
+  async deleteUserTeam(user_team_id: number) {
     interface user_team {
       id: number;
       user_id: number;
@@ -662,17 +662,10 @@ export class Database {
       created_at: Date;
       updated_at: Date;
     }
-
-    const verifyTeamUser = (await prisma.user_team.findFirst({
-      where: {
-        user_id: user_id,
-        team_id: team_id
-      }
-    })) as user_team;
-
+    
     await prisma.user_team.delete({
       where: {
-        id: verifyTeamUser.id
+        id: user_team_id
       }
     });
 
@@ -690,6 +683,16 @@ export class Database {
     return verifyWork;
   }
 
+  async getUserTeamById(user_team_id: number) {
+    const verifyWork = await prisma.user_team.findFirst({
+      where: {
+        id: user_team_id
+      }
+    });
+
+    return verifyWork;
+  }
+
   //вывод пользователей команды
   async updateUsersTeam(user_team_id: number, role_id: number) {
     const verifyWork = await prisma.user_team.update({
@@ -701,6 +704,20 @@ export class Database {
       }
     });
 
+    // console.log(verifyWork);
+    return verifyWork;
+  }
+
+  //вывод пользователей команды
+  async usersTeamRole(user_id: number, team_id: number) {
+    const verifyWork = await prisma.user_team.findFirst({
+      where: {
+        user_id: user_id,
+        team_id: team_id
+      },
+    });
+
+    // console.log(verifyWork);
     return verifyWork;
   }
 
