@@ -1,4 +1,4 @@
-import { PrismaClient, Prisma } from '@prisma/client';
+const { PrismaClient } = require('@prisma/client');
 
 const prisma = new PrismaClient();
 
@@ -57,16 +57,28 @@ async function main() {
   const roles = await prisma.role.createMany({
     data: [
       {
-        name: 'Head'
+        id: 1,
+        name: 'Head',
+        created_at: new Date('2024-03-01T00:00:00.000Z'),
+        updated_at: new Date('2024-03-02T00:00:00.000Z')
       },
       {
-        name: 'Аналитик'
+        id: 2,
+        name: 'Аналитик',
+        created_at: new Date('2024-03-01T00:00:00.000Z'),
+        updated_at: new Date('2024-03-02T00:00:00.000Z')
       },
       {
-        name: 'Тестировщик'
+        id: 3,
+        name: 'Тестировщик',
+        created_at: new Date('2024-03-01T00:00:00.000Z'),
+        updated_at: new Date('2024-03-02T00:00:00.000Z')
       },
       {
-        name: 'Программист'
+        id: 4,
+        name: 'Программист',
+        created_at: new Date('2024-03-01T00:00:00.000Z'),
+        updated_at: new Date('2024-03-02T00:00:00.000Z')
       }
     ],
     skipDuplicates: true // Пропускать дубликаты
@@ -75,20 +87,53 @@ async function main() {
   const statuses = await prisma.status.createMany({
     data: [
       {
-        name: 'Принято'
+        id: 1,
+        name: 'Принято',
+        created_at: new Date('2024-03-01T00:00:00.000Z'),
+        updated_at: new Date('2024-03-02T00:00:00.000Z')
       },
       {
-        name: 'Выполняется'
+        id: 2,
+        name: 'Выполняется',
+        created_at: new Date('2024-03-01T00:00:00.000Z'),
+        updated_at: new Date('2024-03-02T00:00:00.000Z')
       },
       {
-        name: 'Завершено'
+        id: 3,
+        name: 'Завершено',
+        created_at: new Date('2024-03-01T00:00:00.000Z'),
+        updated_at: new Date('2024-03-02T00:00:00.000Z')
+      }
+    ],
+    skipDuplicates: true // Пропускать дубликаты
+  });
+
+  const priority = await prisma.priority.createMany({
+    data: [
+      {
+        id: 1,
+        name: 'Низкий',
+        created_at: new Date('2024-03-01T00:00:00.000Z'),
+        updated_at: new Date('2024-03-02T00:00:00.000Z')
+      },
+      {
+        id: 2,
+        name: 'Средний',
+        created_at: new Date('2024-03-01T00:00:00.000Z'),
+        updated_at: new Date('2024-03-02T00:00:00.000Z')
+      },
+      {
+        id: 3,
+        name: 'Высокий',
+        created_at: new Date('2024-03-01T00:00:00.000Z'),
+        updated_at: new Date('2024-03-02T00:00:00.000Z')
       }
     ],
     skipDuplicates: true // Пропускать дубликаты
   });
 
   // console.log({ worker, dmitry });
-  console.log({ roles, statuses });
+  console.log({ roles, statuses, priority });
 }
 
 main()

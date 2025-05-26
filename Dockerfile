@@ -12,5 +12,6 @@ RUN npm install
 COPY . .
 
 RUN apk add openssl
+RUN npx prisma generate
 
 CMD ["npm", "run", "start"]

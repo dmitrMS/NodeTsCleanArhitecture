@@ -1,15 +1,24 @@
 module.exports = {
   env: {
     node: true,
-    commonjs: true,
-    es2021: true
+    es2021: true,
+    'jest/globals': true // для jest global functions
   },
-  plugins: ['jest', 'prettier'],
-  extends: ['eslint:recommended', 'plugin:jest/recommended', 'prettier'],
+  parser: '@typescript-eslint/parser',
   parserOptions: {
-    sourceType: 'module',
-    allowImportExportEverywhere: true,
-    ecmaVersion: 'latest'
+    ecmaVersion: 'latest',
+    sourceType: 'module'
   },
-  rules: { 'prettier/prettier': 2 }
+  plugins: ['@typescript-eslint', 'jest', 'prettier'],
+  extends: [
+    'eslint:recommended',
+    'plugin:@typescript-eslint/recommended',
+    'plugin:jest/recommended',
+    'prettier'
+  ],
+  rules: {
+    'prettier/prettier': 'error'
+    // по желанию свои правила, например:
+    // '@typescript-eslint/no-explicit-any': 'warn',
+  }
 };

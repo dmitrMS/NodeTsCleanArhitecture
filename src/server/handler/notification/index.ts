@@ -20,7 +20,7 @@ export class NotificationHandler {
     await this.db.updateStatusNotification(notification_id);
 
     return verifyUser !== null
-      ? await this.db.createUserTeam(verifyUser ? verifyUser.id : NaN,team ? team.id : NaN)
+      ? await this.db.createUserTeamAdd(verifyUser ? verifyUser.id : NaN,team ? team.id : NaN)
       : null;
   }
  

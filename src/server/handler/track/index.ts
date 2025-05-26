@@ -70,34 +70,11 @@ export class TrackHandler {
       : null;
   }
 
-  // контроллер для вывода списка работ пользователя
-  async list(token: string, team_id: number) {
-    const verifyUser = await this.jwt.auntentification(token);
-
-    return verifyUser !== null
-      ? team_id == null
-        ? await this.db.getUsersWorkTimes(verifyUser ? verifyUser.id : NaN)
-        : await this.db.getUsersTeamWorkTimes(
-            verifyUser ? verifyUser.id : NaN,
-            team_id
-          )
-      : null;
-  }
-
   async listNoTeam(token: string) {
     const verifyUser = await this.jwt.auntentification(token);
 
     return verifyUser !== null
       ? await this.db.getUsersWorkTimes(verifyUser ? verifyUser.id : NaN)
-      : null;
-  }
-
-  // контроллер для вывода списка работ команды
-  async listTeam(token: string, team_id: number) {
-    const verifyUser = await this.jwt.auntentification(token);
-
-    return verifyUser !== null
-      ? await this.db.getManuUsersTeamWorkTimes(team_id)
       : null;
   }
 

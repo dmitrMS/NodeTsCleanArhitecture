@@ -36,6 +36,8 @@ task.delete('/task/delete/:task_id', async (req, res) => {
   const token = req.headers[authHeader] as string;
   const verifyWork = await taskHandler.delete(token, Number(req.params.task_id));
 
+  console.log(verifyWork);
+
   return verifyWork !== null
     ? res.status(200).json(verifyWork)
     : res.status(200).json(null);

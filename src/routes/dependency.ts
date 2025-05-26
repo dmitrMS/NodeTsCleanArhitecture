@@ -48,7 +48,6 @@ dependency.get('/dependency/list/:project_id', async (req, res) => {
 //   const dependencyId = parseInt(dependency_id, 10);
   
   const verifyWork = await dependencyHandler.list(token, Number(req.params.project_id));
-  console.log(verifyWork);
 
   return res.status(200).json(verifyWork);
 });

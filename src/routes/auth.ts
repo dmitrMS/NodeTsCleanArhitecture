@@ -20,7 +20,6 @@ auth.post('/auth/signup', async (req, res) => {
   });
 } catch (error)
 {
-  console.log('log8');
   console.log(error);
   throw(error);
 }});
@@ -74,4 +73,4 @@ auth.get('/admin/data/:admin_id', async (req, res) => {
     : res.status(401).json();
 });
 
-module.exports = { auth };
+export default { auth };

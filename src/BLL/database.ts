@@ -1,4 +1,4 @@
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
@@ -370,9 +370,7 @@ export class Database {
   // регистрация пользователя
   async createUser(login: string, password: string) {
     try{
-      console.log('log4');
     let salt = await bcrypt.genSalt(10);
-    console.log('log5');
     const result = await prisma.user.create({
       data: {
         login: login,
@@ -656,6 +654,19 @@ export class Database {
         user_id: user_id,
         team_id: team_id,
         role_id: 1
+      }
+    });
+
+    return result;
+  }
+
+    // создать участника команды
+  async createUserTeamAdd(user_id: number, team_id: number) {
+    const result = await prisma.user_team.create({
+      data: {
+        user_id: user_id,
+        team_id: team_id,
+        role_id: 3
       }
     });
 

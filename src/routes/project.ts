@@ -14,6 +14,7 @@ const authHeader = 'x-auth-key';
 project.post('/project/create', async (req, res) => {
   const token = req.headers[authHeader] as string;
   const { project_name, user_id } = req.body;
+  console.log(token);
   const result = await projectHandler.create(token, project_name, user_id);
 
   return result !== null

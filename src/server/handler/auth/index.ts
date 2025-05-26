@@ -20,9 +20,7 @@ export class AuthHandler {
   // контроллер для регистрации
   async singUp(login:string, password:string) {
     try{
-      console.log('log1');
       const user = await this.db.createUser(login, password);
-      console.log('log2');
       return this.jwt.createToken(user.id,user.role);
     }
     catch (error)

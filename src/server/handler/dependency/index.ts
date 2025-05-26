@@ -58,14 +58,12 @@ export class DependencyHandler {
     // Получаем проект и его задачи
     const project = (await this.db.getProjectById(project_id)) as Project;
     const tasks = await this.db.getProjectTasks(project);
-    console.log('Задачи проекта:', tasks);
 
     // Собираем зависимости всех задач
     let dependencies: any[] = [];
     if (tasks) {
       for (const task of tasks) {
         const taskDependencies = await this.db.getTaskDependencies(task.id);
-        console.log(`Зависимости задачи ${task.id}:`, taskDependencies);
         
         if (taskDependencies) {
           dependencies.push(...taskDependencies); // Добавляем все зависимости
